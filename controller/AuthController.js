@@ -39,6 +39,7 @@ exports.signIn = async (req, res) => {
       token: generateToken(user._id),
     });
 
+    // Jika terjadi sebuah server error
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });

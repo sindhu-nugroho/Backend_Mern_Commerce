@@ -16,6 +16,9 @@ exports.uploadFile = async (req, res) => {
         });
         await file.save();
             req.status(201).json(file);
+        
+    // Output jika file gagal di upload
+    
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'File upload failed' });

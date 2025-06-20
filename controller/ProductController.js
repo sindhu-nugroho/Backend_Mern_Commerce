@@ -34,7 +34,7 @@ exports.createProduct = async (req, res) => {
     try {
     // Mengunggah file ke Cloudinary
     const result = await cloudinary.uploader.upload(req.file.path);
-    // Membuat produk dengang data dari body dan menambahkan thumbnail URL
+    // Membuat produk dengan data dari body dan menambahkan thumbnail URL
     const product = new Prodyct({
         ...req.body, // Spread operator untuk menambahkan semua data dari body
         thumbnail: result?.secure_url, // Tambahkan URL dari Cloudinary
@@ -49,7 +49,7 @@ exports.createProduct = async (req, res) => {
         res.status(400).json({ message: err.message });  
     }
 };
-
+    // Menghapus produk dari database
 exports.deleteProduct = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
@@ -66,7 +66,7 @@ exports.deleteProduct = async (req, res) => {
         res.status(500).json({ error: "Failed to delete Product" })
     }
 };
-
+    // Mencari produk berdasarkan id
 exports.updateProduct = async (req, res) => {
     try {
         const { id } = req.params; // Ambil id dari parameter
