@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 
 // Routes
-const userRoutes = require('./routes/serRoutes');
+const userRoutes = require('./routes/UserRoutes');
 const productRoutes = require('./routes/ProductRoutes')
 const fileRoutes = require('./routes/FileRoutes')
 const authRoutes = require('./routes/AuthRoutes')

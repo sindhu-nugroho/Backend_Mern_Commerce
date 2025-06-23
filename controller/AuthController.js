@@ -32,7 +32,7 @@ exports.signIn = async (req, res) => {
 
     // Berikan token dan informasi user
     res.json({
-      _id: user._id,
+      __id: user._id,
       name: user.name,
       role: user.role,
       email: user.email,
