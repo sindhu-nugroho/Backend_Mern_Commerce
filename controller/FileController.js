@@ -1,7 +1,7 @@
 const cloudinary = require('../config/cloudinary');
 const File = require('../models/File')
 
-// Upload file menggunakan ke Cloudinary
+// Upload file menggunakan Cloudinary
 exports.uploadFile = async (req, res) => {
     try {
         // Mengunggah file ke Cloudinary
