@@ -28,4 +28,4 @@ app.use('/api/transactions', transactionRoutes);
 
 // Server Listen
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log('Server running on https://localhost:4000'));
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
