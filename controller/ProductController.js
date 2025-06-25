@@ -1,7 +1,7 @@
 const Product = require("../models/Product");
-const cloudinary = require("../config/cloudinary")
+const cloudinary = require("../config/cloudinary");
 
-// Menambil data semua product
+// Mengambil data semua product
 exports.getProducts = async (req, res) => {
     try {
         const products = await Product.find();
@@ -13,43 +13,45 @@ exports.getProducts = async (req, res) => {
 
 exports.getDetailProduct = async (req, res) => {
     try {
-        const { id } = req.paramsl // Access the dynamic 'id' from the URL
+        const { id } = req.params; // DIPERBAIKI: req.paramsl -> req.params
 
         // Fetch the product from the database using Mongoose
         const product = await Product.findById(id);
         if (!product) {
-            return res.status(404).json({ message: "Product not found" })
+            return res.status(404).json({ message: "Product not found" });
         }
 
-    // Return the found product as a response
-      res.json(product);
+        // Return the found product as a response
+        res.json(product);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message:"Server error" });
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
     }
 };
 
 // Menambahkan product baru
 exports.createProduct = async (req, res) => {
     try {
-    // Mengunggah file ke Cloudinary
-    const result = await cloudinary.uploader.upload(req.file.path);
-    // Membuat produk dengan data dari body dan menambahkan thumbnail URL
-    const product = new Prodyct({
-        ...req.body, // Spread operator untuk menambahkan semua data dari body
-        thumbnail: result?.secure_url, // Tambahkan URL dari Cloudinary
-        cloudinaryId: result?.public_id,
+        // Mengunggah file ke Cloudinary
+        const result = await cloudinary.uploader.upload(req.file.path);
+        
+        // Membuat produk dengan data dari body dan menambahkan thumbnail URL
+        const product = new Product({ // DIPERBAIKI: Prodyct -> Product
+            ...req.body,
+            thumbnail: result?.secure_url,
+            cloudinaryId: result?.public_id,
         });
-    // Menyimpan produk di database
-    await product.save()
-    
-    
-    res.status(201).json(product);
+        
+        // Menyimpan produk di database
+        await product.save();
+        
+        res.status(201).json(product);
     } catch (err) {
         res.status(400).json({ message: err.message });  
     }
 };
-    // Menghapus produk dari database
+
+// Menghapus produk dari database
 exports.deleteProduct = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
@@ -58,25 +60,25 @@ exports.deleteProduct = async (req, res) => {
         await cloudinary.uploader.destroy(product.cloudinaryId);
 
         // Hapus file dari MongoDB (Database)
-        await productdeleteOne();
+        await product.deleteOne(); // DIPERBAIKI: productdeleteOne -> product.deleteOne
 
-        res.status(200).json({ message:"Product deleted successfully" });
+        res.status(200).json({ message: "Product deleted successfully" });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Failed to delete Product" })
+        res.status(500).json({ error: "Failed to delete Product" });
     }
 };
-    // Mencari produk berdasarkan id
+
+// Mencari produk berdasarkan id
 exports.updateProduct = async (req, res) => {
     try {
-        const { id } = req.params; // Ambil id dari parameter
+        const { id } = req.params;
 
         // Cari produk berdasarkan ID
         let product = await Product.findById(id);
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
         }
-
 
         console.log('req.file', req.file);
         let result;
@@ -87,11 +89,12 @@ exports.updateProduct = async (req, res) => {
             // Unggah gambar baru ke Cloudinary
             result = await cloudinary.uploader.upload(req.file.path);
         }
-        // Perbau data produk
+        
+        // Perbarui data produk
         const updateProduct = {
-            ...req.body, // Data lain dari request body
+            ...req.body,
             thumbnail: result?.secure_url || product.thumbnail,
-            cloudinaryId: result?.publid_id || product.cloudinaryId,
+            cloudinaryId: result?.public_id || product.cloudinaryId, // DIPERBAIKI: publid_id -> public_id
         };
 
         // Simpan pembaruan ke database
